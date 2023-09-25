@@ -90,6 +90,31 @@ LTR_sina(){
 }
 # LTR_sina
 
+LTR_sina_subfamily_separate(){
+    for subfamily_color in "ERV1 CE0013" "ERVK C7A609" "ERVL 64C0AB" "ERVL-MaLR A14C94" "Gypsy 1187CD";do
+        subfamily=$(echo ${subfamily_color} | awk '{print $1}')
+        color=$(echo ${subfamily_color} | awk '{print $2}')
+        cd ${dirPATH}/LTR_Subfamily
+        Rscript ${rPATH_me}/ggplot_sina_colorfull.r \
+            enrichmentScore.ggplot_sina.txt \
+            enrichmentScore_filtered.ggplot_sina.${subfamily}.pdf \
+            "Enrichment score" \
+            "-12;8;4" \
+            "Universal;Universal_complementarySet;NonCHMsCpGrich" \
+            "LTR" \
+            $subfamily \
+            "#${color}" \
+            "0.2" \
+            "0.75" \
+            "1" \
+            "3.6" \
+            "3.2"
+    done
+}
+LTR_sina_subfamily_separate
+
+
+
 LINE_sina(){
     cd ${dirPATH}/LINE_Subfamily
     Rscript ${rPATH_me}/ggplot_sina_colorfull.r \
@@ -130,11 +155,14 @@ SINE_sina(){
 
 soft_link_sina_plot(){
     cd ${HOME}/CHMsInOtherContexts/figures
-    for repeatType in LTR LINE SINE;do
-        ln -sf ${dirPATH}/${repeatType}_Subfamily/enrichmentScore_filtered.ggplot_sina.pdf ./make8_sina_${repeatType}_overlapRatio.pdf
+    # for repeatType in LTR LINE SINE;do
+    #     ln -sf ${dirPATH}/${repeatType}_Subfamily/enrichmentScore_filtered.ggplot_sina.pdf ./make8_sina_${repeatType}_overlapRatio.pdf
+    # done
+    for LTR_subfamily in ERV1 ERVK ERVL ERVL-MaLR Gypsy;do
+        ln -sf ${dirPATH}/LTR_Subfamily/enrichmentScore_filtered.ggplot_sina.${LTR_subfamily}.pdf ./make8_sina_LTR_${LTR_subfamily}_overlapRatio.pdf
     done
 }
-# soft_link_sina_plot
+soft_link_sina_plot
 
 
 ##### 4. scatter plot
@@ -170,7 +198,7 @@ LTR_F(){
 
 
 }
-LTR_F
+# LTR_F
 
 
 LINE_F(){
@@ -241,7 +269,7 @@ soft_link_scatter_plot(){
     group=Universal_complementarySet
     ln -sf ${dirPATH}/${repeatType}_Subfamily/"Scatterplot of enrichDetails.pdf" ./make8_scatter_${group}_${repeatType}_overlapRatio.pdf
 }
-soft_link_scatter_plot
+# soft_link_scatter_plot
 
 
 ##### 5. prepare for pieplot
